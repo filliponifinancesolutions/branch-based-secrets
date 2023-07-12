@@ -2,11 +2,15 @@ name: "Branch based secrets"
 description: "Creates environment variables pointing to secrets that are specific to this branch"
 author: "Noam Liran"
 
+branding:
+  icon: "shield"
+  color: "blue"
+
 inputs:
   secrets:
     description: "List of secrets to generate names for, separated by commas"
     required: true
 
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: "node16"
+  main: "dist/index.js"

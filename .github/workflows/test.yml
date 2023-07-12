@@ -1,22 +1,22 @@
-name: "Test branch-based-secrets"
+name: 'Test'
+
 on:
   pull_request:
     branches:
-      - master  
+      - main
   push:
     branches:
-      - master
+      - main
 
 jobs:
   latest:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
 
       - run: npm ci
       - run: npm run package
-
       - run: printenv
 
       - uses: ./
@@ -25,15 +25,17 @@ jobs:
 
       - run: printenv
 
-      - if: ${{ github.ref == 'refs/heads/master' && env.TARGET_BRANCH != 'master' }}
+      - if: ${{ github.ref == 'refs/heads/main' && env.TARGET_BRANCH != 'main' }}
         run: |
-          echo "Assertion failed for TARGET_BRANCH: $TARGET_BRANCH != master"
+          echo "Assertion failed for TARGET_BRANCH: $TARGET_BRANCH != main"
           exit 1
-      - if: ${{ github.ref == 'refs/heads/master' && env.TARGET_BRANCH_U != 'MASTER' }}
+
+      - if: ${{ github.ref == 'refs/heads/main' && env.TARGET_BRANCH_U != 'MAIN' }}
         run: |
-          echo "Assertion failed for TARGET_BRANCH_U: $TARGET_BRANCH_U != MASTER"
+          echo "Assertion failed for TARGET_BRANCH_U: $TARGET_BRANCH_U != MAIN"
           exit 1
+
       - if: ${{ env.TESTSECRET_NAME != format('TESTSECRET_{0}', env.TARGET_BRANCH_U) }}
         run: |
-          echo "Assertion failed for TESTSECRET_NAME: $TESTSECRET_NAME != TESTSECRET_MASTER"
+          echo "Assertion failed for TESTSECRET_NAME: $TESTSECRET_NAME != TESTSECRET_MAIN"
           exit 1
